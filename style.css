@@ -1,0 +1,44 @@
+* {
+    background-color: white;
+    font-family: 'Times New Roman', Times, serif;
+
+}
+
+#gamediv{
+    width: 550px;
+    height: 550px;
+    display: flex;
+    flex-wrap: wrap;
+    text-align: center;
+}
+
+#gamediv div{
+    width: 55px;
+    height: 55px;
+}
+
+.pole.down{
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    z-index: 0;
+}
+.black{
+    background-color: grey;
+}
+
+.white{
+    background-color: lightgrey;
+}
+
+.side{
+    background-color: burlywood;
+}
+
+.empty{
+    background-color: darkgoldenrod;
+}
+
+.check{
+    position: absolute;
+    border-radius: 50%;
+    background-color: black;
+}
