@@ -96,7 +96,7 @@ function getfromIdCharW(id){
     return toABC(arr[0]);
 }
 
-function paint(){
+function paintDesk(){
     
  //   GAMEDIV.innerHTML = 'play game there';
 
@@ -115,14 +115,57 @@ function paint(){
     }
 }
 
-function checker(){
-    let tag = document.createElement("div");
-    let tagpole = document.getElementById("4_2");
-    tag.className = "check";
-    tag.top = tagpole.top;
-    tag.left = tagpole.left;
-    tagpole.appendChild(tag);
+function initCheck(){
+    let arrwhite = [[1,3],[1,1],[2,2],[3,3],[3,1],[4,2],[5,3],[5,1],[6,2],[7,3],[7,1],[8,2]];
+    let arrblack = [[1,7],[2,8],[2,6],[3,7],[4,8],[4,6],[5,7],[6,8],[6,6],[7,7],[8,8],[8,6]];
+    let arrclear = [[1,5],[2,4],[3,5],[4,4],[5,5],[6,4],[7,5],[8,4]];
+    addCheckFromArray(arrwhite,"white");
+    addCheckFromArray(arrblack,"black");
+    clearCheckFromArray(arrclear);
 }
 
-(paint());
-(checker())
+function addCheckFromArray(arr, color) {
+    for (let i = 0; i < arr.length; i++) {
+        let tag = getCellTag(arr[i][0], arr[i][1]);
+        tag.classList.remove("bc", "wc", "wcd", "bcd");
+        if (color == "white") {
+            tag.classList.add("wc");
+        }
+        if (color == "black") {
+            tag.classList.add("bc");
+        }
+        if (color == "white_d") {
+            tag.classList.add("wcd");
+        }
+        if (color == "black_d") {
+            tag.classList.add("bcd");
+        }
+    }
+}
+
+function clearCheckFromArray(arr){
+    for (let i = 0; i < arr.length; i++) {
+        let tag = getCellTag(arr[i][0], arr[i][1]);
+        tag.classList.remove("bc", "wc", "wcd", "bcd");
+    }
+}
+
+function getCellTag(w,h){
+    return document.getElementById(w + "_" + h);
+}
+
+function checker(){
+    //let tag = document.createElement("div");
+    //let tagpole = document.getElementById("4_2");
+    //tagpole.classList.add("wc");
+    //tagpole = document.getElementById("4_6");
+    //tagpole.classList.add("bc");
+    //tag.top = tagpole.top;
+    //tag.left = tagpole.left;
+    //tagpole.appendChild(tag);
+}
+
+
+(paintDesk());
+(checker());
+(initCheck());

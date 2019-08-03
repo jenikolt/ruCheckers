@@ -42,3 +42,23 @@
     border-radius: 50%;
     background-color: black;
 }
+
+.wc {
+    background-image: url("images/wc.png");
+    background-size: 100%;
+}
+
+.bc {
+    background-image: url("images/bc.png");
+    background-size: 100%;
+}
+
+.wcd {
+    background-image: url("images/wcd.png");
+    background-size: 100%;
+}
+
+.bcd {
+    background-image: url("images/bcd.png");
+    background-size: 100%;
+}
