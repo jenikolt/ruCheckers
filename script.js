@@ -1,4 +1,6 @@
 const GAMEDIV = document.getElementById("gamediv");
+const CELLS = new Array(32);
+const SelectCell = new Array(2);
 
 function getClassNameById(id_w, id_h){
     if(id_w == 0){
@@ -73,6 +75,26 @@ function debug(event){
     debugdiv.innerHTML = getfromIdCharW(id)+"-"+getFromIdH(id);
 }
 
+function ClickCell(e){
+    debug(e);
+    let id = event.target.id;
+    let w = getFromIdW(id);
+    let h = getFromIdH(id);
+    console.log(SelectCell);
+    if(w < 9 && w > 0 && h < 9 && h >0){
+        if(SelectCell[0] > 0 && SelectCell[1] > 0){
+            let t = document.getElementById(SelectCell[0]+"_"+SelectCell[1]);
+            t.classList.remove("select");
+            
+            console.log(t);
+        }
+        document.getElementById(w+"_"+h).classList.add("select");
+        SelectCell[0] = w;
+        SelectCell[1] = h;
+    }
+ }
+
+
 function setShadow(event){
     if(event.type == "mousedown"){
         event.target.classList.add("down");
@@ -106,7 +128,7 @@ function paintDesk(){
             tag.id = w + "_" + h;
             tag.className = getClassNameById(w,h);
             tag.innerHTML = getTextById(w,h);
-            tag.addEventListener("click",debug);
+            tag.addEventListener("click",ClickCell);
             tag.addEventListener("mousedown",setShadow);
             tag.addEventListener("mouseup",setShadow);
             tag.addEventListener("mouseleave", setShadow)
@@ -116,12 +138,19 @@ function paintDesk(){
 }
 
 function initCheck(){
+    let c = {
+        width: 1,
+        height: 1,
+        dam: 0,
+        color: 0
+    }
     let arrwhite = [[1,3],[1,1],[2,2],[3,3],[3,1],[4,2],[5,3],[5,1],[6,2],[7,3],[7,1],[8,2]];
     let arrblack = [[1,7],[2,8],[2,6],[3,7],[4,8],[4,6],[5,7],[6,8],[6,6],[7,7],[8,8],[8,6]];
     let arrclear = [[1,5],[2,4],[3,5],[4,4],[5,5],[6,4],[7,5],[8,4]];
     addCheckFromArray(arrwhite,"white");
     addCheckFromArray(arrblack,"black");
     clearCheckFromArray(arrclear);
+
 }
 
 function addCheckFromArray(arr, color) {

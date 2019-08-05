@@ -62,3 +62,8 @@
     background-image: url("images/bcd.png");
     background-size: 100%;
 }
+
+.select {
+    outline:  2px solid yellow;
+    z-index: 0;
+}
