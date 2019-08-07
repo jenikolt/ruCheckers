@@ -1,6 +1,9 @@
 const GAMEDIV = document.getElementById("gamediv");
 const CELLS = new Array(32);
 const SelectCell = new Array(2);
+const SelectCellPrev = new Array(2);
+const SelectCheck = new Array(2);
+const SelectCheckPrev = new Array(2);
 
 function getClassNameById(id_w, id_h){
     if(id_w == 0){
@@ -75,11 +78,66 @@ function debug(event){
     debugdiv.innerHTML = getfromIdCharW(id)+"-"+getFromIdH(id);
 }
 
-function ClickCell(e){
+function ClickCell(e) {
     debug(e);
     let id = event.target.id;
-    let w = getFromIdW(id);
-    let h = getFromIdH(id);
+    let w = getFromIdW(id) * 1;
+    let h = getFromIdH(id) * 1;
+    if (((w + h) % 2) == 0) {
+        if (w < 9 && w > 0 && h < 9 && h > 0) {
+            for (let i = 0; i < 32; i++) {
+                if (CELLS[i].width == w && CELLS[i].height == h) {
+                    if (!CELLS[i].empty) {
+                        if (SelectCell[0] === undefined) {
+                            SelectCell[0] = w;
+                            SelectCell[1] = h;
+                        }
+                        SelectCellPrev[0] = SelectCell[0];
+                        SelectCellPrev[1] = SelectCell[1];
+                        SelectCell[0] = w;
+                        SelectCell[1] = h;
+                        CELLS[i].select = true;
+                        if (SelectCellPrev[0] != SelectCell[0] && SelectCellPrev[1] != SelectCell[1]) {
+                            for (let j = 0; j < 32; j++) {
+                                if (CELLS[j].width == SelectCellPrev[0] && CELLS[j].height == SelectCellPrev[1]) {
+                                    CELLS[j].select = false;
+                                    break;
+                                }
+                            }
+                        }
+                        break;
+                    } else {
+                        if (SelectCell[0] === undefined) {
+                            break;
+                        }
+                        let previndex = 0;
+                        for (let j = 0; j < 32; j++) {
+                            if (CELLS[j].width == SelectCellPrev[0] && CELLS[j].height == SelectCellPrev[1]) {
+                                previndex = j;
+                                break;
+                            }
+                        }
+                        CELLS[i].color = CELLS[previndex].color;
+                        CELLS[i].king = CELLS[previndex].king;
+                        CELLS[i].empty = false;
+                        CELLS[i].select = true;
+                        CELLS[previndex].empty = true;
+                        CELLS[previndex].select = false;
+                        SelectCellPrev[0] = SelectCell[0];
+                        SelectCellPrev[1] = SelectCell[1];
+                        SelectCell[0] = w;
+                        SelectCell[1] = h;
+                        break;
+                    }
+                }
+            }
+        }
+        console.log(SelectCell);
+        console.log(SelectCellPrev);
+
+    }
+    repaintPropsFromArr(CELLS);
+    /*
     console.log(SelectCell);
     if(w < 9 && w > 0 && h < 9 && h >0){
         if(SelectCell[0] > 0 && SelectCell[1] > 0){
@@ -91,8 +149,8 @@ function ClickCell(e){
         document.getElementById(w+"_"+h).classList.add("select");
         SelectCell[0] = w;
         SelectCell[1] = h;
-    }
- }
+    }*/
+}
 
 
 function setShadow(event){
@@ -120,8 +178,6 @@ function getfromIdCharW(id){
 
 function paintDesk(){
     
- //   GAMEDIV.innerHTML = 'play game there';
-
     for(let h = 9; h >= 0; h--){
         for(let w = 0; w <= 9; w++){
             let tag = document.createElement("div");
@@ -138,19 +194,102 @@ function paintDesk(){
 }
 
 function initCheck(){
-    let c = {
+    /*let c = {
         width: 1,
         height: 1,
-        dam: 0,
-        color: 0
+        king: false,
+        color: false, //false - black, true - white
+        empty: false,
+        select: false
+    }*/
+    let initarray = [
+        {w:1,h:3,c:1},
+        {w:1,h:1,c:1},
+        {w:2,h:2,c:1},
+        {w:3,h:3,c:1},
+        {w:3,h:1,c:1},
+        {w:4,h:2,c:1},
+        {w:5,h:3,c:1},
+        {w:5,h:1,c:1},
+        {w:6,h:2,c:1},
+        {w:7,h:3,c:1},
+        {w:7,h:1,c:1},
+        {w:8,h:2,c:1},
+        {w:1,h:7,c:2},
+        {w:2,h:8,c:2},
+        {w:2,h:6,c:2},
+        {w:3,h:7,c:2},
+        {w:4,h:8,c:2},
+        {w:4,h:6,c:2},
+        {w:5,h:7,c:2},
+        {w:6,h:8,c:2},
+        {w:6,h:6,c:2},
+        {w:7,h:7,c:2},
+        {w:8,h:8,c:2},
+        {w:8,h:6,c:2},
+        {w:1,h:5,c:0},
+        {w:2,h:4,c:0},
+        {w:3,h:5,c:0},
+        {w:4,h:4,c:0},
+        {w:5,h:5,c:0},
+        {w:6,h:4,c:0},
+        {w:7,h:5,c:0},
+        {w:8,h:4,c:0},
+    ]
+    for (let i = 0; i < 32; i++){
+        let _color = false;
+        let _empty = true;
+        if(initarray[i].c > 0){
+            _empty = false;
+            if(initarray[i].c == 1){
+                _color = true;
+            }
+        }
+        let c = new Object();
+        
+            c.width = initarray[i].w;
+            c.height = initarray[i].h;
+            c.king = false;
+            c.color = _color;
+            c.empty = _empty;
+            c.select = false;
+        
+        CELLS[i] = c;
     }
-    let arrwhite = [[1,3],[1,1],[2,2],[3,3],[3,1],[4,2],[5,3],[5,1],[6,2],[7,3],[7,1],[8,2]];
-    let arrblack = [[1,7],[2,8],[2,6],[3,7],[4,8],[4,6],[5,7],[6,8],[6,6],[7,7],[8,8],[8,6]];
-    let arrclear = [[1,5],[2,4],[3,5],[4,4],[5,5],[6,4],[7,5],[8,4]];
-    addCheckFromArray(arrwhite,"white");
-    addCheckFromArray(arrblack,"black");
-    clearCheckFromArray(arrclear);
+    repaintPropsFromArr(CELLS);
+    //let arrwhite = [[1,3],[1,1],[2,2],[3,3],[3,1],[4,2],[5,3],[5,1],[6,2],[7,3],[7,1],[8,2]];
+    //let arrblack = [[1,7],[2,8],[2,6],[3,7],[4,8],[4,6],[5,7],[6,8],[6,6],[7,7],[8,8],[8,6]];
+    //let arrclear = [[1,5],[2,4],[3,5],[4,4],[5,5],[6,4],[7,5],[8,4]];
+    //addCheckFromArray(arrwhite,"white");
+    //addCheckFromArray(arrblack,"black");
+    //clearCheckFromArray(arrclear);
+}
 
+function repaintPropsFromArr(arr){
+    for (let i = 0; i < 32; i++){
+        let tag = getCellTag(arr[i].width, arr[i].height);
+        tag.classList.remove("bc", "wc", "wcd", "bcd", "select");
+        if(arr[i].select){
+            tag.classList.add("select");
+        }
+        if(arr[i].empty){
+            continue;
+        }else{
+            if(arr[i].color){
+                if(arr[i].king){
+                    tag.classList.add("wcd");
+                }else{
+                    tag.classList.add("wc");
+                }
+            }else{
+                if(arr[i].king){
+                    tag.classList.add("bcd");
+                }else{
+                    tag.classList.add("bc");
+                }
+            }            
+        }
+    }
 }
 
 function addCheckFromArray(arr, color) {
